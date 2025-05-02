@@ -1,39 +1,17 @@
-# Tic Tac Toe game in Python:
-#
-# The game should be a 3x3 grid where two players ('X' and 'O') take turns.
-# After each move, check if a player has won by filling a row, column, or diagonal.
-#
-# Requirements:
-# - Print the board after every move.
-# - Ask the current player for their move (board position number).
-# - Prevent players from choosing an occupied spot.
-# - End the game when someone wins or the board is full.
-#
-# Example:
-# Initial board:
-# 1 | 2 | 3
-# 4 | 5 | 6
-# 7 | 8 | 9
-#
-# Player X chooses position 5:
-# 1 | 2 | 3
-# 4 | X | 6
-# 7 | 8 | 9
-#
-# Player O chooses position 1:
-# O | 2 | 3
-# 4 | X | 6
-# 7 | 8 | 9
-#
-# ... and so on until either a player wins or the board is full.
-#
-# Bonus Challenges:
-# DONE: - Add input validation (make sure players can't enter invalid positions). 
-# DONE: - Allow players to play again without restarting the script.
-# DONE: - Add a simple AI to play against
-# DONE: Ask player if they want to be X or O first
-# DONE: - If player wins, they start as X; if they lose, they are O in the following round ; otherwise they keep same position
-# (if they choose to continue playing)
+"""
+Tic Tac Toe game in Python.
+
+This script implements a two-player Tic Tac Toe game where a human player competes against a simple AI.
+Key features include:
+- A 3x3 board rendered in the terminal.
+- User choice of playing as 'X' or 'O' (with 'X' going first).
+- Input validation to prevent illegal or duplicate moves.
+- Win condition checking after each move (rows, columns, diagonals).
+- Simple AI that plays randomly or blocks winning moves.
+- Option to replay the game after it ends.
+- Tracks and displays the win count for both player and computer.
+- Modular structure designed for integration with a frontend or API.
+"""
 
 import random
 
@@ -44,6 +22,12 @@ class TicTacToe:
     comp_wins = 0
     player_wins = 0
     player = ''
+    
+    winning_combinations = [
+            [1, 2, 3], [4, 5, 6], [7, 8, 9],  # rows
+            [1, 4, 7], [2, 5, 8], [3, 6, 9],  # columns
+            [1, 5, 9], [3, 5, 7]              # diagonals
+        ]
 
     @staticmethod
     def position_selector():
@@ -106,32 +90,9 @@ class TicTacToe:
             else:
                 print("Board after my last move: ")
 
-            TicTacToe.print_board()
-            move = input("Enter the position you want to play (as X): ")
+            TicTacToe.player_move("X", x_moves, o_moves)
 
-            try:
-                move = int(move)
-            except ValueError:
-                print ("invalid input type. input must be an integer between 1 and 9. try again")
-                continue
-
-            if move < 10 and move > 0 and move not in x_moves and move not in o_moves:
-                b[move - 1] = 'X'
-                print ("Your move: \n")
-                TicTacToe.print_board()
-                x_moves.append(move)
-            else: 
-                print("invalid input. your move has to be between 1 and 9 and must not be already filled")
-                print("try again")
-                continue
-
-            winning_combinations = [
-                [1, 2, 3], [4, 5, 6], [7, 8, 9],  # rows
-                [1, 4, 7], [2, 5, 8], [3, 6, 9],  # columns
-                [1, 5, 9], [3, 5, 7]              # diagonals
-            ]
-
-            x_wins = any(all(pos in x_moves for pos in combo)for combo in winning_combinations)
+            x_wins = any(all(pos in x_moves for pos in combo)for combo in TicTacToe.winning_combinations)
 
             if x_wins:
                 TicTacToe.player = 'x'
@@ -144,7 +105,7 @@ class TicTacToe:
 
             else:
                 block = []
-                for combo in winning_combinations:
+                for combo in TicTacToe.winning_combinations:
                     pos_filled = [pos for pos in combo if pos in x_moves]
                     pos_not_filled = [pos for pos in combo if pos not in x_moves and pos not in o_moves]
 
@@ -164,7 +125,7 @@ class TicTacToe:
                 b[number - 1] = 'O'
                 o_moves.append(number)
 
-            o_wins = any(all(pos in o_moves for pos in combo)for combo in winning_combinations)
+            o_wins = any(all(pos in o_moves for pos in combo)for combo in TicTacToe.winning_combinations)
             if o_wins:
                 print("HAHA gotcha: \n")
                 TicTacToe.print_board()
@@ -196,31 +157,9 @@ class TicTacToe:
             else:
                 print("Board after my move: ")
 
-            TicTacToe.print_board()
+            TicTacToe.player_move("O", o_moves, x_moves)
 
-            move = input("Enter the position you want to play (as O): ")
-            try:
-                move = int(move)
-            except ValueError:
-                print ("invalid input type. input must be an integer between 1 and 9. try again")
-                continue
-            if move < 10 and move > 0 and move not in x_moves and move not in o_moves:
-                b[move - 1] = 'O'
-                print ("Your move: \n")
-                TicTacToe.print_board()
-                o_moves.append(move)
-            else: 
-                print("invalid input. your move has to be between 1 and 9 and must not be already filled")
-                print("try again")
-                continue
-
-            winning_combinations = [
-                [1, 2, 3], [4, 5, 6], [7, 8, 9],  # rows
-                [1, 4, 7], [2, 5, 8], [3, 6, 9],  # columns
-                [1, 5, 9], [3, 5, 7]              # diagonals
-            ]
-
-            o_wins = any(all(pos in o_moves for pos in combo)for combo in winning_combinations)
+            o_wins = any(all(pos in o_moves for pos in combo)for combo in TicTacToe.winning_combinations)
 
             if o_wins:
                 print ("Congratulations! You won! \n")
@@ -233,7 +172,7 @@ class TicTacToe:
 
             else:
                 block = []
-                for combo in winning_combinations:
+                for combo in TicTacToe.winning_combinations:
                     pos_filled = [pos for pos in combo if pos in o_moves]
                     pos_not_filled = [pos for pos in combo if pos not in x_moves and pos not in o_moves]
 
@@ -253,7 +192,7 @@ class TicTacToe:
                 b[number - 1] = 'X'
                 x_moves.append(number)
 
-            x_wins = any(all(pos in x_moves for pos in combo)for combo in winning_combinations)
+            x_wins = any(all(pos in x_moves for pos in combo)for combo in TicTacToe.winning_combinations)
             if x_wins:
                 print("HAHA gotcha: \n")
                 TicTacToe.print_board()
@@ -265,7 +204,27 @@ class TicTacToe:
         if not x_wins and not o_wins:
             print("No one won! Boo hoo")
             return
+        
+    @staticmethod
+    def player_move(mark, player_moves, opp_moves):
+        b = TicTacToe.board
+        while True:
+            TicTacToe.print_board()
+            move = input(f"Enter the position you want to play (as {mark}): ")
+            try:
+                move = int(move)
+            except ValueError:
+                print("Invalid input. Please enter a number between 1 and 9.")
+                continue
 
+            if 1 <= move <= 9 and move not in player_moves and move not in opp_moves:
+                b[move - 1] = mark
+                player_moves.append(move)
+                print("Your move:\n")
+                TicTacToe.print_board()
+                return move
+            else:
+                print("Invalid move. Position already taken or out of bounds. Try again.")
 
 
 # === Main Game Loop ===
@@ -289,14 +248,18 @@ while True:
 # - If good block is found, play it.
 # - If none found (or all are already filled), fallback to a random valid move.
 
+# DONE
 # STEP 3: Let the player choose their symbol (X or O)
 # DONE: - At the start of the game, ask the player if they want to be 'X' or 'O'.
 # - If the player chooses 'O', the computer should play first as 'X'.
 # Otherwise, player starts
 
+# DONE
 # STEP 4: Make the starting player dynamic based on win history
 # - If the player wins, they start first (as X) in the next game.
 # - If the computer wins, it starts first.
+
+# STEP 4.5: modularize better myGameX and myGameO
 
 # STEP 5: Prepare for frontend integration (turn game into callable functions)
 # - Refactor your class to separate logic into:
