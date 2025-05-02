@@ -32,7 +32,7 @@
 # DONE: - Allow players to play again without restarting the script.
 # DONE: - Add a simple AI to play against
 # DONE: Ask player if they want to be X or O first
-# - If player wins, they start as X, otherwise they are O in the following round
+# DONE: - If player wins, they start as X; if they lose, they are O in the following round ; otherwise they keep same position
 # (if they choose to continue playing)
 
 import random
@@ -57,19 +57,8 @@ class TicTacToe:
             choice = input("Would you rather start as X or O? Remeber, X always goes first (X/O): ")
             TicTacToe.player = choice.strip().lower()
 
-        # if player == 'x':
-        #     computer = 'o'    
-        # else:
-        #     computer = 'x'
-        # return
-
     def run_game():
         TicTacToe.position_selector()
-
-        # if TicTacToe.player == 'x':
-        #     TicTacToe.myGameX()
-        # else:
-        #     TicTacToe.myGameO()
 
     @staticmethod
     def reset_game():
@@ -145,6 +134,7 @@ class TicTacToe:
             x_wins = any(all(pos in x_moves for pos in combo)for combo in winning_combinations)
 
             if x_wins:
+                TicTacToe.player = 'x'
                 print ("Congratulations! You won! \n")
                 TicTacToe.player_wins += 1
                 return 
@@ -179,6 +169,7 @@ class TicTacToe:
                 print("HAHA gotcha: \n")
                 TicTacToe.print_board()
                 print ("Hehe you loser")
+                TicTacToe.player = 'o'
                 TicTacToe.comp_wins += 1
                 return
 
@@ -204,7 +195,6 @@ class TicTacToe:
                 print("board after my first move: ")
             else:
                 print("Board after my move: ")
-                TicTacToe.print_board()
 
             TicTacToe.print_board()
 
@@ -234,6 +224,7 @@ class TicTacToe:
 
             if o_wins:
                 print ("Congratulations! You won! \n")
+                TicTacToe.player = 'x' #if won, restart next game as x
                 TicTacToe.player_wins += 1
                 return 
             
@@ -267,6 +258,7 @@ class TicTacToe:
                 print("HAHA gotcha: \n")
                 TicTacToe.print_board()
                 print ("Hehe you loser")
+                TicTacToe.player = 'o' # if player lost, start next game as o
                 TicTacToe.comp_wins += 1
                 return
 
