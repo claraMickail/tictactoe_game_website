@@ -28,6 +28,10 @@ class TicTacToe:
             [1, 4, 7], [2, 5, 8], [3, 6, 9],  # columns
             [1, 5, 9], [3, 5, 7]              # diagonals
         ]
+    
+    @staticmethod
+    def get_board():
+        return TicTacToe.board
 
     @staticmethod
     def position_selector():
@@ -52,7 +56,7 @@ class TicTacToe:
     
     @staticmethod
     def exit_game():
-        print ("\n Game ended! Thanks for playing")
+        print ("\nGame ended! Thanks for playing")
         print(f"I have won {TicTacToe.comp_wins} games while you have won {TicTacToe.player_wins} games")
     
     def play_again_check():        
@@ -92,52 +96,16 @@ class TicTacToe:
 
             TicTacToe.player_move("X", x_moves, o_moves)
 
-            x_wins = any(all(pos in x_moves for pos in combo)for combo in TicTacToe.winning_combinations)
+            update = TicTacToe.playing_update('O', x_moves, o_moves)
 
-            if x_wins:
-                TicTacToe.player = 'x'
-                print ("Congratulations! You won! \n")
-                TicTacToe.player_wins += 1
-                return 
-            
-            if (len(x_moves) + len(o_moves)) >= 9:
+            if update == 0:
                 break
-
-            else:
-                block = []
-                for combo in TicTacToe.winning_combinations:
-                    pos_filled = [pos for pos in combo if pos in x_moves]
-                    pos_not_filled = [pos for pos in combo if pos not in x_moves and pos not in o_moves]
-
-                    if len(pos_filled) == 2 and len(pos_not_filled) == 1:
-                        block.append(pos_not_filled[0])
-
-                if block:
-                    for num in block:
-                        if num not in x_moves and num not in o_moves:
-                            number = num
-                            break
-                else:
-                    number = random.randint(1, 9)
-                    while number in x_moves or number in o_moves:
-                        number = random.randint(1, 9)
-
-                b[number - 1] = 'O'
-                o_moves.append(number)
-
-            o_wins = any(all(pos in o_moves for pos in combo)for combo in TicTacToe.winning_combinations)
-            if o_wins:
-                print("HAHA gotcha: \n")
-                TicTacToe.print_board()
-                print ("Hehe you loser")
-                TicTacToe.player = 'o'
-                TicTacToe.comp_wins += 1
+            elif update == 1:
                 return
 
-        if not x_wins and not o_wins:
-            print("No one won! Boo hoo")
-            return
-
+        TicTacToe.print_board()
+        print("No one won! Boo hoo")
+        return
 
     @staticmethod   
     def myGameO():
@@ -153,57 +121,22 @@ class TicTacToe:
                 move = random.randint(1,9)
                 x_moves.append(move)
                 b[move-1] = "X"
-                print("board after my first move: ")
+                print("Board after my first move: ")
             else:
                 print("Board after my move: ")
 
             TicTacToe.player_move("O", o_moves, x_moves)
+            update = TicTacToe.playing_update('X', o_moves, x_moves)
 
-            o_wins = any(all(pos in o_moves for pos in combo)for combo in TicTacToe.winning_combinations)
-
-            if o_wins:
-                print ("Congratulations! You won! \n")
-                TicTacToe.player = 'x' #if won, restart next game as x
-                TicTacToe.player_wins += 1
-                return 
-            
-            if (len(x_moves) + len(o_moves)) >= 9:
+            if update == 0:
                 break
-
-            else:
-                block = []
-                for combo in TicTacToe.winning_combinations:
-                    pos_filled = [pos for pos in combo if pos in o_moves]
-                    pos_not_filled = [pos for pos in combo if pos not in x_moves and pos not in o_moves]
-
-                    if len(pos_filled) == 2 and len(pos_not_filled) == 1:
-                        block.append(pos_not_filled[0])
-
-                if block:
-                    for num in block:
-                        if num not in x_moves and num not in o_moves:
-                            number = num
-                            break
-                else:
-                    number = random.randint(1, 9)
-                    while number in x_moves or number in o_moves:
-                        number = random.randint(1, 9)
-
-                b[number - 1] = 'X'
-                x_moves.append(number)
-
-            x_wins = any(all(pos in x_moves for pos in combo)for combo in TicTacToe.winning_combinations)
-            if x_wins:
-                print("HAHA gotcha: \n")
-                TicTacToe.print_board()
-                print ("Hehe you loser")
-                TicTacToe.player = 'o' # if player lost, start next game as o
-                TicTacToe.comp_wins += 1
+            elif update == 1:
                 return
+            
+        TicTacToe.print_board()
+        print("No one won! Boo hoo")
+        return
 
-        if not x_wins and not o_wins:
-            print("No one won! Boo hoo")
-            return
         
     @staticmethod
     def player_move(mark, player_moves, opp_moves):
@@ -225,6 +158,51 @@ class TicTacToe:
                 return move
             else:
                 print("Invalid move. Position already taken or out of bounds. Try again.")
+
+    @staticmethod
+    def playing_update(playing, playing_moves, opp_moves):
+        b = TicTacToe.board
+        player_wins = any(all(pos in playing_moves for pos in combo)for combo in TicTacToe.winning_combinations)
+
+        if player_wins:
+            print ("Congratulations! You won! \n")
+            TicTacToe.player = 'x' #if won, restart next game as x
+            TicTacToe.player_wins += 1
+            return 1 # if return 1, its like we return. i.e return 1 if anyone wins
+            
+        if (len(opp_moves) + len(playing_moves)) >= 9:
+            return 0    # if return 0, its like we break
+
+        else:
+            block = []
+            for combo in TicTacToe.winning_combinations:
+                pos_filled = [pos for pos in combo if pos in playing_moves]
+                pos_not_filled = [pos for pos in combo if pos not in opp_moves and pos not in playing_moves]
+
+                if len(pos_filled) == 2 and len(pos_not_filled) == 1:
+                    block.append(pos_not_filled[0])
+
+            if block:
+                for num in block:
+                    if num not in opp_moves and num not in playing_moves:
+                        number = num
+                        break
+            else:
+                number = random.randint(1, 9)
+                while number in opp_moves or number in playing_moves:
+                    number = random.randint(1, 9)
+
+            b[number - 1] = playing.upper()
+            opp_moves.append(number)
+
+        opp_wins = any(all(pos in opp_moves for pos in combo)for combo in TicTacToe.winning_combinations)
+        if opp_wins:
+            print("HAHA gotcha: \n")
+            TicTacToe.print_board()
+            print ("Hehe you loser")
+            TicTacToe.player = 'o' # if player lost, start next game as o
+            TicTacToe.comp_wins += 1
+            return 1
 
 
 # === Main Game Loop ===
@@ -259,10 +237,12 @@ while True:
 # - If the player wins, they start first (as X) in the next game.
 # - If the computer wins, it starts first.
 
+# DONE
 # STEP 4.5: modularize better myGameX and myGameO
 
 # STEP 5: Prepare for frontend integration (turn game into callable functions)
 # - Refactor your class to separate logic into:
+#       Examples (don't necessarily need to follow this)
 #     - `make_move(position, mark)` → updates the board
 #     - `check_winner()` → returns winner or draw
 #     - `get_board()` → returns current board state
