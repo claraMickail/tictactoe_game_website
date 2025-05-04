@@ -1,0 +1,65 @@
+<!-- My structure
+1. index.html:
+   - Collects player's name using a form.
+   - Submits it to `playing.html` (currently via basic form navigation).
+
+2. playing.html:
+   - Loads the p5.js library.
+   - Includes a `<script src="sketch.js"></script>` line at the bottom of the `<main>` block.
+   - This script draws the Tic Tac Toe board and handles interaction.
+
+3. sketch.js:
+   - This file contains the actual drawing and interaction logic using p5.js.
+
+4. style.css:
+   - Applies consistent layout and style to both html pages.
+   - `canvas` style makes the board visible and styled.
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tic Tac Toe</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
+    <body>
+        <main class="container">
+            <h1>Let's Tic Tac Toe!</h1>
+            <section>
+                <h2>Ready to play the best game of Tic Tac Toe?</h2>
+                <form action="playing.html">
+                    <label for="name">First, what name would you like to go by?</label>
+                    <input type="text" id="name" name="name" required>
+                    <button type="submit">Yes, let's go!</button>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>
+
+<!-- 
+NOTES:
+em : "emphasis" (makes italics)
+i  : "italics" 
+
+b      : bold
+strong : "makes strong" (makes bold)
+
+These elements visually look the same but will be read 
+differently in page readers
+
+<break>: starts a new line. (doesn't need a closing tag)
+
+<ul> 
+    <li> ... </li> 
+    <li> ... </li>
+</ul> : "unordered list" and "list item"
+
+<a href = "playing.html">
+    text
+</a> : hyperlinks text to send to the href link
+-->

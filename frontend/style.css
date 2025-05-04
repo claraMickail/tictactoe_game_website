@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .container {
+    text-align: center;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  form {
+    margin-top: 1rem;
+  }
+  
+  input[type="text"] {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    width: 200px;
+    font-size: 1rem;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  canvas {
+    border: 2px solid #000;
+    margin-top: 1rem;
+  }
+  
+  .back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #007BFF;
+    text-decoration: none;
+  }
+  
+
+/*
+3 types of .css selectors:
+  1. Element (tag-selector): aka the html tags 
+  2. Class (.class-selctor):
+  ex. if in html:
+  <h1 class = "big-header">
+    Title
+   </h1>
+   OR
+   <a href = "index.html">
+      Home
+    </a>
+
+    Then in css:
+    .class-name {
+        property: value;
+    }
+
+    Ex. 
+    html: Notice these have multiple classes separated by a space
+    <button class="btn btn-1"> button 1 </button>
+    <button class="btn btn-2"> button 2 </button>
+
+    in css:
+    .btn{
+        padding: 10 px;
+        color: while;
+    }
+
+    .btn-1 {background-color: green;}
+    .btn-2 {background-color: pink;}
+
+    Here, multiple class selectors an element must have 
+    for the styling to occur
+    .selector-1.selector-2 {property: value;} 
+
+    can also combine any type of selector:
+    h1.class-selctor{}
+    #id-selector.class-selector
+
+
+  3. ID (#id-selector): 
+  an element can only have 1 ID but can have multiple classes
+
+  ex in html:
+  <h1 id= "main-header">
+    Title
+  </h1>
+
+  in css:
+  #id {property: value;}
+*/
+  
