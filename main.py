@@ -42,7 +42,7 @@ class TicTacToe:
 
         TicTacToe.player = ""
         while TicTacToe.player != "x" and TicTacToe.player != "o":
-            choice = input("Would you rather start as X or O? Remeber, X always goes first (X/O): ")
+            choice = input("Would you rather start as X or O? Remember, X always goes first (X/O): ")
             TicTacToe.player = choice.strip().lower()
 
     def run_game():
@@ -94,7 +94,7 @@ class TicTacToe:
             else:
                 print("Board after my last move: ")
 
-            TicTacToe.player_move("X", x_moves, o_moves)
+            TicTacToe.player_move("X")
 
             update = TicTacToe.playing_update('O', x_moves, o_moves)
 
@@ -125,7 +125,7 @@ class TicTacToe:
             else:
                 print("Board after my move: ")
 
-            TicTacToe.player_move("O", o_moves, x_moves)
+            TicTacToe.player_move("O")
             update = TicTacToe.playing_update('X', o_moves, x_moves)
 
             if update == 0:
@@ -137,27 +137,28 @@ class TicTacToe:
         print("No one won! Boo hoo")
         return
 
-        
     @staticmethod
-    def player_move(mark, player_moves, opp_moves):
-        b = TicTacToe.board
+    def player_move(mark):
         while True:
             TicTacToe.print_board()
             move = input(f"Enter the position you want to play (as {mark}): ")
+
             try:
                 move = int(move)
             except ValueError:
                 print("Invalid input. Please enter a number between 1 and 9.")
                 continue
 
-            if 1 <= move <= 9 and move not in player_moves and move not in opp_moves:
-                b[move - 1] = mark
-                player_moves.append(move)
-                print("Your move:\n")
-                TicTacToe.print_board()
-                return move
+            if 1 <= move <= 9:
+                if TicTacToe.make_move(move, mark):
+                    print("Your move:\n")
+                    TicTacToe.print_board()
+                    return move
+                else:
+                    print("Invalid move. That position is already taken.")
             else:
-                print("Invalid move. Position already taken or out of bounds. Try again.")
+                print("Invalid move. Please choose a number from 1 to 9.")
+
 
     @staticmethod
     def playing_update(playing, playing_moves, opp_moves):
@@ -203,6 +204,31 @@ class TicTacToe:
             TicTacToe.player = 'o' # if player lost, start next game as o
             TicTacToe.comp_wins += 1
             return 1
+        
+    def check_winner():
+        x_wins = any(all(pos in TicTacToe.x_moves for pos in combo)for combo in TicTacToe.winning_combinations) 
+        o_wins = any(all(pos in TicTacToe.o_moves for pos in combo)for combo in TicTacToe.winning_combinations)
+
+        if x_wins:
+            return 'X'
+        if o_wins:
+            return 'O'
+        else:
+            return None
+        
+    
+    """Returns True if move was successful, False otherwise"""
+    @staticmethod
+    def make_move(position, mark):
+        if TicTacToe.board[position - 1] in ['X', 'O']:
+            return False
+
+        TicTacToe.board[position - 1] = mark.upper()
+        if mark.lower() == 'x':
+            TicTacToe.x_moves.append(position)
+        else:
+            TicTacToe.o_moves.append(position)
+        return True
 
 
 # === Main Game Loop ===
@@ -240,13 +266,14 @@ while True:
 # DONE
 # STEP 4.5: modularize better myGameX and myGameO
 
+# DONE
 # STEP 5: Prepare for frontend integration (turn game into callable functions)
 # - Refactor your class to separate logic into:
-#       Examples (don't necessarily need to follow this)
-#     - `make_move(position, mark)` → updates the board
-#     - `check_winner()` → returns winner or draw
-#     - `get_board()` → returns current board state
-#     - `reset_game()` → resets game state
+#       Examples
+#     - DONE: `make_move(position, mark)` → updates the board
+#     - DONE: `check_winner()` → returns winner or draw
+#     - DONE: `get_board()` → returns current board state
+#     - DONE: `reset_game()` → resets game state
 # - These functions will be useful for turning the game into an API backend later.
 
 # STEP 6: Build a simple frontend with HTML + CSS + p5.js
