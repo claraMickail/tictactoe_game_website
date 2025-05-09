@@ -289,10 +289,12 @@ while True:
 #     - GET `/state` → returns the current board and whose turn it is
 # - Serve `index.html` from Flask or run the frontend separately.
 
-# STEP 8: Bonus polish
+# STEP 8: Get creative with p5.js
+# Examples:
 # - Add visuals: highlight winning lines
 # - Add basic animations or delays between moves
 # - Add sound or hover effects
 # - Add a “Restart Game” button on the frontend
+# - Create themes: ex. a dark room one where mouse is a flashlight
 
 # ==== END OF FUTURE STEPS ====

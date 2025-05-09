@@ -21,8 +21,8 @@ function draw() {
 
 function drawGrid() {
   for (let i = 1; i < 3; i++) {
-    line(i * 100, 0, i * 100, 300);  
-    line(0, i * 100, 300, i * 100);
+    line(i * 100, 0, i * 100, 300);  // Vertical lines
+    line(0, i * 100, 300, i * 100);  // Horizontal lines
   }
 }
 
@@ -42,5 +42,3 @@ function mousePressed() {
     currentPlayer = currentPlayer === "X" ? "O" : "X";
   }
 }
-
-
